@@ -1,0 +1,32 @@
+# 本地转换台服务配置
+server:
+  port: 8866
+  servlet:
+    # 显式固定 UTF-8，保证中文参数名、商品名称在请求与响应中不乱码
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: sdk-convert
+
+# iOS SafePay：按订单 app_id 取对应商户 App 的 SDK 身份（未配置的 app_id 转换时报错）
+alipay:
+  safe-pay:
+    apps:
+      "2021003141664716":          # 小芒
+        from-app-url-scheme: www.leadeon.Alipay
+        app-name: com.mg.ec
+        sdk-ver: 15.7.6
+        an: com.mg.ec
+        av: "202610281415"
+        sv: h.a.3.7.6
+      "2021003100600446":          # 人民网（不校验 App 身份）
+        from-app-url-scheme: www.leadeon.Alipay
+        app-name: cn.10086.app
+        sdk-ver: "3.8.16"
+        an: cn.10086.app
+        av: "2406211243101500"
+        sv: h.a.3.8.16

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>SDK 转换台 · 支付宝</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+
+<main class="page">
+    <section class="channel-row" aria-label="支持的 SDK 渠道">
+        <span class="channel-label">已接入渠道</span>
+        <div class="channel-list" id="channelList">
+            <span class="channel-loading">正在加载…</span>
+        </div>
+        <span class="channel-soon">更多渠道持续接入</span>
+    </section>
+
+    <section class="workbench" aria-label="SDK 转换台">
+        <div class="workbench-head">
+            <div class="tabs" role="tablist" aria-label="转换功能">
+                <button class="tab is-active" data-panel="parse" role="tab" aria-selected="true" id="tabParse">SDK 转 JSON</button>
+                <button class="tab" data-panel="convert" role="tab" aria-selected="false" id="tabConvert">支付链接</button>
+            </div>
+        </div>
+
+        <!-- SDK 转 JSON 工作区 -->
+        <div class="panel is-active" id="panelParse" role="tabpanel" aria-labelledby="tabParse">
+            <div class="split">
+                <section class="pane">
+                    <header class="pane-head">
+                        <div class="pane-title"><span class="step">01</span>输入内容</div>
+                        <div class="pane-actions">
+                            <button class="btn btn-ghost btn-xs" id="sampleToggle" type="button">
+                                载入示例 <span class="caret">▾</span>
+                            </button>
+                            <div class="menu" id="sampleMenu" hidden></div>
+                        </div>
+                    </header>
+                    <div class="editor">
+                        <textarea id="parseInput" class="code-area" spellcheck="false" autocomplete="off"
+                                  placeholder="在这里粘贴支付宝订单串、alipays:// Scheme、网关链接、Render 链接或 JSON…"></textarea>
+                    </div>
+                    <footer class="pane-foot">
+                        <button class="btn btn-ghost" id="clearParse" type="button">清空</button>
+                        <button class="btn btn-primary" id="parseBtn" type="button">
+                            <span class="spinner" hidden></span>
+                            <span class="btn-label">转换为 JSON</span>
+                            <kbd>Ctrl ↵</kbd>
+                        </button>
+                    </footer>
+                </section>
+
+                <section class="pane">
+                    <header class="pane-head">
+                        <div class="pane-title"><span class="step">02</span>JSON 结果</div>
+                        <div class="pane-actions">
+                            <span class="type-chip" id="resultType" hidden></span>
+                            <button class="icon-btn" id="copyJson" type="button" title="复制 JSON" disabled>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="9" y="9" width="11" height="11" rx="2.5"></rect>
+                                    <path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </header>
+                    <div class="result">
+                        <div class="viewer json-viewer" id="jsonViewer">
+                            <div class="empty">
+                                <div class="empty-glyph">{ }</div>
+                                <p>转换后的 JSON 将显示在这里</p>
+                                <span>支持订单串、Scheme、网关链接与 Render 链接</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 支付链接工作区 -->
+        <div class="panel" id="panelConvert" role="tabpanel" aria-labelledby="tabConvert">
+            <div class="split">
+                <section class="pane">
+                    <header class="pane-head">
+                        <div class="pane-title"><span class="step">01</span>订单内容</div>
+                        <div class="pane-actions">
+                            <button class="btn btn-ghost btn-xs" id="convertSampleBtn" type="button">载入示例</button>
+                        </div>
+                    </header>
+                    <div class="editor">
+                        <textarea id="convertInput" class="code-area" spellcheck="false" autocomplete="off"
+                                  placeholder="粘贴支付宝订单串（APP / WAP）…"></textarea>
+                    </div>
+                    <footer class="pane-foot convert-foot">
+                        <label class="select-field">
+                            <span>转换目标</span>
+                            <select id="convertTarget"></select>
+                        </label>
+                        <button class="btn btn-primary" id="convertBtn" type="button">
+                            <span class="spinner" hidden></span>
+                            <span class="btn-label">转换为链接</span>
+                            <kbd>Ctrl ↵</kbd>
+                        </button>
+                    </footer>
+                </section>
+
+                <section class="pane">
+                    <header class="pane-head">
+                        <div class="pane-title"><span class="step">02</span>转换结果</div>
+                        <div class="pane-actions">
+                            <button class="icon-btn" id="copyConvert" type="button" title="复制结果" disabled>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="9" y="9" width="11" height="11" rx="2.5"></rect>
+                                    <path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </header>
+                    <div class="result">
+                        <div class="viewer output-viewer" id="convertViewer">
+                            <div class="empty">
+                                <div class="empty-glyph">URL</div>
+                                <p>转换结果将显示在这里</p>
+                                <span>选择转换目标后点击转换</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <footer class="page-footer">
+        <span>SDK to JSON</span>
+        <span class="dot-sep">·</span>
+        <span>支持支付宝订单串、Scheme、网关链接、Render 链接与收款码</span>
+    </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/js/app.js"></script>
+</body>
+</html>
