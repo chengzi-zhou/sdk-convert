@@ -30,3 +30,10 @@ alipay:
         an: cn.10086.app
         av: "2406211243101500"
         sv: h.a.3.8.16
+      "2021004161648658":          # 小红书
+        from-app-url-scheme: xhsdiscover
+        app-name: com.xingin.discover
+        sdk-ver: 15.8.42
+        an: com.xingin.discover
+        av: "9501801"
+        sv: h.a.3.8.42
